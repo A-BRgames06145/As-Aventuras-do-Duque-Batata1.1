@@ -111,6 +111,11 @@ function setup() {
   larry.visible = false;
   larry.debug = true;
   larry.setCollider("rectangle", -30,-32,500,750);
+  
+  flyCollider = createSprite(100, 200, 10, 10);
+  flyCollider.visible = false;
+  flyCollider2 = createSprite(1250, 200, 10, 10);
+  flyCollider2.visible = false;
 
   nuvensGroup = createGroup();
   cenouraGroup = createGroup();
@@ -360,10 +365,6 @@ function draw() {
   }
 
   if(gamestate >=10 && gamestate<=14){
-    flyCollider = createSprite(100, 200, 10, 10);
-    flyCollider.visible = false;
-    flyCollider2 = createSprite(1250, 200, 10, 10);
-    flyCollider2.visible = false;
     
     spawnFlyme();
     if(flymeGroup.collide(cenouraGroup)){
