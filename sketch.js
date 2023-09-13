@@ -109,9 +109,9 @@ function setup() {
 
   larry.scale = 0.5;
   larry.visible = false;
-  larry.debug = true;
+  // larry.debug = true;
   larry.setCollider("rectangle", -30,-32,500,750);
-  
+
   flyCollider = createSprite(100, 200, 10, 10);
   flyCollider.visible = false;
   flyCollider2 = createSprite(1250, 200, 10, 10);
@@ -188,7 +188,7 @@ function draw() {
   }
 
   if(gamestate >= 1 && gamestate<=7){
-    if(!backgroundMusic.isPlaying()){
+    if(!backgroundMusic.isPlaying() & isGameOver == false){
       backgroundMusic.play();
       // backgroundMusic.setVolume(0.5);
     }
@@ -311,7 +311,7 @@ function draw() {
     nuvensGroup.destroyEach();
     backgroundMusic.stop();
 
-    if(!backgroundBoss.isPlaying()){
+    if(!backgroundBoss.isPlaying() & isGameOver == false){
       backgroundBoss.play();
     }
 
@@ -351,10 +351,12 @@ function draw() {
   if (gamestate >= 9 && gamestate <= 15){
     background(backgroundImg2, 0, 0, width, height);
     backgroundBoss.stop();
+    fogo.destroy();
+    flameSound.stop();
   }
 
   if(gamestate >= 9 && gamestate<=14){
-    if(!backgroundMusic2.isPlaying()){
+    if(!backgroundMusic2.isPlaying() & isGameOver == false){
       backgroundMusic2.play(1);
       // backgroundMusic2.setVolume(0.5);
     }
@@ -569,7 +571,7 @@ function handleGigaSlimeCollision(){
     if (batataLife > 0) {
       monsterKillCount = 0;
       gamestate = 9;
-      batataLife = 20;
+      batataLife = batataLife + 10;
       isBatataTeleported = false;
     }
   }
@@ -612,6 +614,9 @@ function handleGameOver(monsterGroup){
 }
 
 function gameOver(){
+  backgroundBoss.stop();
+  backgroundMusic.stop();
+  backgroundMusic2.stop();
   if (!isLost&& !loseSound.isPlaying()){
     loseSound.play();
     isLost = true;
@@ -796,7 +801,7 @@ function flamethrower(){
   }
   if (gigaSlimeState === 3){
     if (isGigaSlimeAttacking === false){
-    fogo = createSprite(305, 250, 100, 100);
+    fogo = createSprite(270, 250, 100, 100);
     isGigaSlimeAttacking = true;
     }
     if (isGigaSlimeAttacking&& !flameSound.isPlaying()){
@@ -805,7 +810,7 @@ function flamethrower(){
     }
 
     fogo.addImage("Fogo", fogoImg);
-    fogo.scale = 0.65;
+    fogo.scale = 0.75;
 
     if (frameCount% 200 === 0){
       fogo.destroy();
@@ -814,18 +819,17 @@ function flamethrower(){
       gigaSlime.changeImage("GigaSlime",gigaSlimeImg1);
       isGigaSlimeAttacking = false;
     }
-    if (fogo.collide(batata)){
-      fogo.destroy();
-      batataLife = batataLife -5;
+    if (fogo.isTouching(batata) & frameCount% 10 === 0){
+      batataLife = batataLife -1;
        if (batataLife <= 0){
          batata.destroy();
          isGameOver = true;
          gameOver();
      }
-      gigaSlimeState =1;
-      gigaSlime.changeImage("GigaSlime",gigaSlimeImg1);
-      flameSound.stop();
-      isGigaSlimeAttacking = false;
+      // gigaSlimeState =1;
+      // gigaSlime.changeImage("GigaSlime",gigaSlimeImg1);
+      // flameSound.stop();
+      // isGigaSlimeAttacking = false;
     }
   }
 }
